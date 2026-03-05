@@ -87,6 +87,7 @@ class LLM_Generator:
                 pad_token_id=kwargs["pad_token_id"],
                 do_sample=kwargs["do_sample"],
                 max_new_tokens=kwargs["max_new_tokens"],
+                repetition_penalty=kwargs.get("repetition_penalty", 1.0),
             )
             # decode only the newly generated tokens
             new_tokens = output_ids[0][inputs["input_ids"].shape[-1]:]

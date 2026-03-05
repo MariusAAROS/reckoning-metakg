@@ -1,33 +1,43 @@
-from datasets import load_dataset
+from datasets import load_dataset, concatenate_datasets
 import json, os
 
 os.makedirs("data/babilong", exist_ok=True)
 
-ds = load_dataset("RMT-team/babilong", "qa1")  # adjust subset as needed
+N_SUBSETS = 10
+RATIO_TRAIN = 0.95
+RATIO_VAL = (1-RATIO_TRAIN) * 0.5
+RATIO_TEST = (1-RATIO_TRAIN) * 0.5
 
-TRAIN_SPLIT = 0.8
-VAL_SPLIT = 0.1
-TEST_SPLIT = 0.1
+subsets = [f"qa{i+1}" for i in range(N_SUBSETS)]
+included_splits = ["0k", "1k", "2k"]
 
-included_splits = ["0k"]
-for split_name, split_data in ds.items():
-    if not split_name in included_splits:
+# Collect all data per split across subsets
+all_data = {s: [] for s in included_splits}
+for subset in subsets:
+    ds = load_dataset("RMT-team/babilong", subset)
+    for split_name, split_data in ds.items():
+        if split_name in included_splits:
+            all_data[split_name].append(split_data)
+
+# Concatenate across subsets and write to files
+for split_name, datasets in all_data.items():
+    if not datasets:
         continue
+    combined = concatenate_datasets(datasets).shuffle(seed=42)
 
-    split_size = len(split_data)
-    train_end = int(split_size * TRAIN_SPLIT)
-    val_end = train_end + int(split_size * VAL_SPLIT)
-    test_end = val_end + int(split_size * TEST_SPLIT)
+    split_size = len(combined)
+    train_end = int(split_size * RATIO_TRAIN)
+    val_end = train_end + int(split_size * RATIO_VAL)
+    test_end = val_end + int(split_size * RATIO_TEST)
 
-    split_data = split_data.shuffle(seed=42)
-    for i, row in enumerate(split_data):
+    for i, row in enumerate(combined):
         if i < train_end:
             split = "train"
         elif i < val_end:
             split = "val"
         elif i < test_end:
             split = "test"
-        else:            
+        else:
             break
         record = {
             "guid": f"{split}-{i}",

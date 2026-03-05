@@ -433,7 +433,8 @@ class MetaLearnerModule(MetaModule):
             pad_token_id=fmodel.tokenizer.eos_token_id,
             temperature=0.0,
             do_sample=False,
-            max_new_tokens=256
+            max_new_tokens=32,
+            repetition_penalty=1.3,
         )
 
     def validation_step(self, batch, batch_idx) -> Dict:
@@ -606,6 +607,7 @@ class CausalLMModule(MetaModule):
             model=model.lm_model,
             tokenizer=model.tokenizer,
             device=self.device)
+        print("records:", records)
         generator.generate(
             records,
             pad_token_id=model.tokenizer.eos_token_id,
