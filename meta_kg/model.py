@@ -71,7 +71,7 @@ class CausalLM(nn.Module):
             torch_dtype=torch.bfloat16 if config.bf16 else torch.float32,
             attn_implementation=config.attn_implementation,
             trust_remote_code=True,
-            cache_dir="/mnt/u14157_ic_nlp_001_files_nfs/scartch/home/zechen/.cache/huggingface/hub",
+            cache_dir=config.cache_dir if config.cache_dir else None,
         )
 
         tokenizer.pad_token_id = tokenizer.eos_token_id

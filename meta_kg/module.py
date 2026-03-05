@@ -423,11 +423,9 @@ class MetaLearnerModule(MetaModule):
         return output_dict
 
     def validation_inference(self, records, fmodel):
-        meta_model = CausalLM.from_config(self.hparams)
-        meta_model.load_state_dict(fmodel.state_dict())
         generator = LLM_Generator(
-            model_repo_id="gpt2",
-            model=meta_model.lm_model,
+            model_repo_id=self.hparams.model_name_or_path,
+            model=fmodel.lm_model,
             tokenizer=fmodel.tokenizer,
             device=self.device)
         generator.generate(

@@ -72,24 +72,26 @@ class LLM_Generator:
             query["prompt"] = self.tokenizer.decode(
                 truncated["input_ids"], skip_special_tokens=True)
         
-        generator = pipeline(
-            "text-generation",
-            model=self.model,
-            tokenizer=self.tokenizer,
-            device=self.device)
-        
+        model = self.model
+        device = next(model.parameters()).device
+
         for query in queries:
-            response = generator(
+            inputs = self.tokenizer(
                 query["prompt"],
-                num_return_sequences=1,
-                return_full_text=False,
+                return_tensors="pt",
+                truncation=True,
+                max_length=1024 - kwargs["max_new_tokens"] - 2,
+            ).to(device)
+            output_ids = model.generate(
+                **inputs,
                 pad_token_id=kwargs["pad_token_id"],
                 do_sample=kwargs["do_sample"],
                 max_new_tokens=kwargs["max_new_tokens"],
             )
-            
+            # decode only the newly generated tokens
+            new_tokens = output_ids[0][inputs["input_ids"].shape[-1]:]
             query["prompt"] = query.pop("orig_prompt")
-            query["output"] = response[0]["generated_text"]
+            query["output"] = self.tokenizer.decode(new_tokens, skip_special_tokens=True)
 
 if __name__ == "__main__":
     import uuid

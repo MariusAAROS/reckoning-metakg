@@ -33,11 +33,16 @@ lora_r: 16                        # the r parameter for LoRA
 # wandb_param:
 wandb_name: multi                 # the name of the experiment in wandb
 wandb_checkpoint: true            # whether to save checkpoints to wandb
-wandb_entity: epfl_nlp_phd        # the wandb entity
+wandb_entity: "m-ortega-p-le-l-onard-de-vinci"           # the wandb entity
 wandb_project: meta-memory        # the wandb project
 wandb_data: latest                # the wandb data version
 wandb_model: false                # whether to load the checkpoint from wandb
-wandb_api_key: 9edee5b624841e10c88fcf161d8dc54d4efbee29       # the wandb api key
+wandb_api_key: "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"       # the wandb api key
+
+# precision_param:
+bf16: true                       # whether to use bfloat16 precision
+attn_implementation: eager        # attention implementation: [eager, sdpa, flash_attention_2]
+cache_dir: null                   # HuggingFace model cache directory (null = default ~/.cache/huggingface)
 
 # util_param:
 num_workers: 4
