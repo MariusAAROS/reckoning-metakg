@@ -96,6 +96,7 @@ class CausalLM(nn.Module):
             util_logger.info(f"trainable parameters: {trainable_params:,d} || all params: {all_param:,d}")
             util_logger.info(f"trainable%: {100 * trainable_params / all_param:.4f}")
 
+        # model.train()
         return cls(
             model,
             tokenizer,

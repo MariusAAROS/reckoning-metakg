@@ -129,6 +129,7 @@ class MetaModule(pl.LightningModule):
             self.log(f"val_{key}", torch.tensor(val).to(self.device), on_epoch=True, prog_bar=True, sync_dist=True)
 
         self.validation_step_outputs.clear()
+        # torch.cuda.empty_cache()
 
     def test_step(self, batch, batch_idx) -> Dict:
         test_out = self.validation_step(batch, batch_idx)
@@ -448,6 +449,7 @@ class MetaLearnerModule(MetaModule):
         torch.set_grad_enabled(True)
         self.model.train()
         output_dict = self.step(batch, is_train=False)
+        torch.cuda.empty_cache()
         for mkey in ["inner_loss", "outer_loss"]:
             self.log(
                 f"val_batch_{mkey}",

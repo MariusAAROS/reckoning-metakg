@@ -53,6 +53,6 @@ load_order: in
 no_facts: false
 random_facts: false
 no_question: false
-max_eval_data: 0
+max_eval_data: 20
 
 device_idx: 0

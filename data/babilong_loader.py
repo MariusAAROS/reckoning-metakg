@@ -9,7 +9,7 @@ RATIO_VAL = (1-RATIO_TRAIN) * 0.5
 RATIO_TEST = (1-RATIO_TRAIN) * 0.5
 
 subsets = [f"qa{i+1}" for i in range(N_SUBSETS)]
-included_splits = ["0k", "1k", "2k"]
+included_splits = ["0k"]
 
 # Collect all data per split across subsets
 all_data = {s: [] for s in included_splits}
