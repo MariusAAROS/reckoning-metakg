@@ -432,9 +432,10 @@ class MetaLearnerModule(MetaModule):
         generator.generate(
             records,
             pad_token_id=fmodel.tokenizer.eos_token_id,
-            temperature=0.0,
-            do_sample=False,
-            max_new_tokens=32,
+            temperature=0.3,
+            min_new_tokens=1,
+            do_sample=True,
+            max_new_tokens=32, # max_new_tokens=5,
             repetition_penalty=1.3,
         )
 
@@ -744,7 +745,7 @@ def get_features(batch, accumulate_steps: int = 1):
 
     # print("global_batch_size: ", global_batch_size)
     # print("accumulate_steps: ", accumulate_steps)
-    micro_batch_size = global_batch_size // accumulate_steps
+    micro_batch_size = max(1, global_batch_size // accumulate_steps)
     # print("micro_batch_size: ", micro_batch_size)
 
 

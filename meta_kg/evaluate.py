@@ -160,6 +160,11 @@ class GenerationOutput:
         self.metrics["em"] = self.compute_exact_match(pred, gold)
         self.metrics["f1"] = self.compute_f1(response, target)
 
+        print(f"Response: {response.split(REASON_PREFIX)[0].strip()}",
+              f"Supporting facts: {response.split(REASON_PREFIX)[1].strip() if REASON_PREFIX in response else 'N/A'}",
+              f"\tTarget: {target}",
+              f"\tEM: {self.metrics['em']}, F1: {self.metrics['f1']}")
+
         # if REASON_PREFIX in response:
         #     reason_steps_gen, reason_steps_gold = self.extract_reason_steps(response, target)
         #     ratio, coverage = self.reason_ratio(reason_steps_gen, reason_steps_gold)

@@ -30,21 +30,21 @@ wandb_model: false
 wandb_checkpoint: false
 
 # train param:
-train_batch_size: 1
+train_batch_size: 2
 predict_batch_size: 1
 eval_batch_size: 1
-num_train_epochs: 1
-callback_monitor: val_accuracy
+num_train_epochs: 6
+callback_monitor: val_f1
 
 # inner param:
-n_inner_iter: 6
+n_inner_iter: 3
 dyna_lr: true
 inner_verbose: false
 inner_mode: all
 
-inner_lr: 5e-5                    # the learning rate used for inner loop optimization
-inner_grad_accumulate: false      # whether to accumulate gradients in the inner loop
-inner_accumulate_steps: 1         # the number of steps to accumulate gradients in the inner loop
+inner_lr: 3e-5                    # the learning rate used for inner loop optimization
+inner_grad_accumulate: true      # whether to accumulate gradients in the inner loop
+inner_accumulate_steps: 2      # the number of steps to accumulate gradients in the inner loop
 
 # data_param:
 dataset: babilong               # student_records, loss_in_mid, babilong
@@ -56,5 +56,3 @@ no_question: false
 max_eval_data: 20
 
 device_idx: 0
-
-# max_seq_length: 256

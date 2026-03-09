@@ -41,7 +41,7 @@ for split_name, datasets in all_data.items():
             break
         record = {
             "guid": f"{split}-{i}",
-            "facts": [s.strip() for s in row["input"].split("\n") if s.strip()],
+            "facts": [s.strip() + "." for s in row["input"].split(". ") if s.strip()],
             "question": row["question"],
             "answer": row["target"],
             "support": row.get("input", "")
