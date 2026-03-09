@@ -7,7 +7,7 @@ defaults:
 # model_name_or_path: google/gemma-2b
 
 model_type: smoll-gpt2
-model_name_or_path: distilbert/distilgpt2
+model_name_or_path: littleworth/protgpt2-distilled-tiny
 
 # experiment param:
 do_train: true
@@ -33,11 +33,11 @@ wandb_checkpoint: false
 train_batch_size: 1
 predict_batch_size: 1
 eval_batch_size: 1
-num_train_epochs: 1
-callback_monitor: val_accuracy
+num_train_epochs: 2
+callback_monitor: val_loss
 
 # inner param:
-n_inner_iter: 6
+n_inner_iter: 2
 dyna_lr: true
 inner_verbose: false
 inner_mode: all
@@ -56,5 +56,3 @@ no_question: false
 max_eval_data: 20
 
 device_idx: 0
-
-# max_seq_length: 256

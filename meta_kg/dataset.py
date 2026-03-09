@@ -399,6 +399,7 @@ class MetaKnowledgeDataset(Dataset):
             sequences.append((prompt, response))
             max_seq_length = max(max_seq_length, self.compute_seq_length(prompt, response))
 
+        # max_seq_length = min(max_seq_length, self.args.max_seq_length)
         # print("outer loop max_seq_length: ", max_seq_length)
 
         for prompt, response in sequences:

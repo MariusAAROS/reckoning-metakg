@@ -11,6 +11,8 @@ from transformers import (
     AutoModelForCausalLM,
     T5ForConditionalGeneration,
     GenerationConfig,
+
+    GPT2Tokenizer
 )
 
 from peft import (
@@ -25,12 +27,25 @@ from peft import (
 model_class_registry = {
     "t5": T5ForConditionalGeneration,
     "gpt2": GPT2LMHeadModel,
+    "smoll-gpt2": GPT2LMHeadModel,
     "gptj": AutoModelForCausalLM,
     "llama": AutoModelForCausalLM,
     "mllama": AutoModelForCausalLM,
     "mistral": AutoModelForCausalLM,
     "gemma": AutoModelForCausalLM,
     "qwen": AutoModelForCausalLM,
+}
+
+tokenizer_class_registry = {
+    "t5": AutoTokenizer,
+    "gpt2": AutoTokenizer,
+    "smoll-gpt2": GPT2Tokenizer,
+    "gptj": AutoTokenizer,
+    "llama": AutoTokenizer,
+    "mllama": AutoTokenizer,
+    "mistral": AutoTokenizer,
+    "gemma": AutoTokenizer,
+    "qwen": AutoTokenizer,
 }
 
 util_logger = logging.getLogger("meta_knowledge.model")
@@ -63,7 +78,8 @@ class CausalLM(nn.Module):
         :param config: the global configuration
         :rtype CausalLM
         """
-        tokenizer = AutoTokenizer.from_pretrained(config.model_name_or_path)
+        tokenizer_class = tokenizer_class_registry[config.model_type]
+        tokenizer = tokenizer_class.from_pretrained(config.model_name_or_path)
         model_config = AutoConfig.from_pretrained(config.model_name_or_path)
         model_class = model_class_registry[config.model_type]
         model = model_class.from_pretrained(
@@ -73,6 +89,8 @@ class CausalLM(nn.Module):
             trust_remote_code=True,
             cache_dir=config.cache_dir if config.cache_dir else None,
         )
+
+        print(f"Tokenizer vocab size: {tokenizer.vocab_size}, Model vocab size: {model_config.vocab_size}")
 
         tokenizer.pad_token_id = tokenizer.eos_token_id
         model.config.pad_token_id = tokenizer.eos_token_id

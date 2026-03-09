@@ -136,4 +136,5 @@ dmypy.json
 # Results
 runs/
 outputs/
-data/
+data/babilong
+data/proofwriter
